@@ -2,37 +2,36 @@
 //Step 1 — Go to your comments page
 //Navigate to:
 //https://www.instagram.com/your_activity/interactions/comments
-//Make sure the comments list has fully loaded before proceeding.
 //Step 2 — Open the browser console
-
 //Press F12 (or Ctrl+Shift+J on Windows / Cmd+Option+J on Mac)
 //Click the Console tab
-
 //Step 3 — Paste and run the script
 //Copy the script from script.js and paste it into the console, then press Enter.
-//Step 4 — Confirm each batch
-//When the "Delete comments?" dialog appears, click Delete manually.
-//The script handles everything else — selecting comments, clicking the delete bar, looping to the next batch — automatically.
-
-//Why one manual click?
-//Instagram's confirmation dialog ("Are you sure you want to delete these comments?") loads inside a cross-origin Facebook iframe. Browser security policy blocks any programmatic access to cross-origin iframes, so the confirm button cannot be clicked automatically from the console.
-//Everything else is fully automated.
-//
-
+//The script handles everything automatically.
+// Change BATCH_SIZE below to select how many comments you wanna delete at one time, but don't exceed 30-35 or Meta may rate limit you
 
 ;(async function () {
   const DELAY = (ms) => new Promise((r) => setTimeout(r, ms))
-  const BATCH_SIZE = 30 //Feel free to change the batch size accordingly to how many comments you wannna delete at one time , dont go above 30-35 tho - meta might rate limit you - i initially started at BATCH_SIZE = 10
+  const BATCH_SIZE = 30 // Keep the comment deletion batch size within 30-35 - i initially started at BATCH_SIZE=10
 
   const clickProper = (el) => {
-    el.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }))
-    el.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }))
-    el.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    el.click()
   }
 
   const findSpanByText = (text) =>
     [...document.querySelectorAll('span')]
       .find(el => el.textContent.trim() === text && el.children.length === 0)
+
+  const waitForElement = async (selector, timeout = 5000) => {
+    const start = Date.now()
+    while (Date.now() - start < timeout) {
+      const el = document.querySelector(selector)
+      if (el) return el
+      await DELAY(100)
+    }
+    return null
+  }
 
   const waitForSelect = async (timeout = 30000) => {
     const start = Date.now()
@@ -58,7 +57,7 @@
       .filter(el => {
         const text = el.textContent.trim()
         return text.length > 3 &&
-               !['Sort & filter','Cancel','Select','Delete','Messages'].includes(text) &&
+               !['Sort & filter', 'Cancel', 'Select', 'Delete', 'Messages'].includes(text) &&
                el.closest('a') === null
       })
 
@@ -83,17 +82,19 @@
 
     await DELAY(800)
 
-    const deleteBtn = [...document.querySelectorAll('div[tabindex="0"]')]
-      .find(el => el.textContent.trim() === 'Delete')
+    // Find Delete via span like stolen code does
+    const deleteBtn = [...document.querySelectorAll('span')]
+      .find(el => el.textContent.trim() === 'Delete' && el.children.length === 0)
     if (!deleteBtn) { console.error('Delete bar not found'); break }
     clickProper(deleteBtn)
-    await DELAY(1000)
+    await DELAY(500)
 
-    // Try auto-confirm, if not found wait for manual click
-    const confirmBtn = [...document.querySelectorAll('div[tabindex="0"], button')]
-      .find(el => el.textContent.trim() === 'Delete' && el !== deleteBtn)
+    // Confirm via button[tabindex="0"] like stolen code
+    const confirmBtn = await waitForElement('button[tabindex="0"]', 5000)
     if (confirmBtn) {
-      clickProper(confirmBtn)
+      confirmBtn.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      await DELAY(300)
+      confirmBtn.click()
     } else {
       console.log('>>> click Delete in dialog <<<')
       await waitForDialogToClose(30000)
