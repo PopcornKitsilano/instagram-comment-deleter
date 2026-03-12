@@ -4,7 +4,7 @@ A browser console script to bulk-delete your Instagram comments from the **Your 
 
 Deletes comments in batches of 30 — fully automated except for **one manual confirm click per batch** (Instagram's confirm dialog runs in a cross-origin Facebook iframe and cannot be clicked programmatically). 
 
-# Feel free to change the batch size accordingly to how many comments you wannna delete at one time , dont go above 30-35 though - meta might rate limit you - i initially started at BATCH_SIZE = 10
+## Feel free to change the batch size accordingly to how many comments you wannna delete at one time , dont go above 30-35 though - meta might rate limit you - i initially started at BATCH_SIZE = 10
 
 ---
 
