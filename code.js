@@ -22,7 +22,7 @@
 
 ;(async function () {
   const DELAY = (ms) => new Promise((r) => setTimeout(r, ms))
-  const BATCH_SIZE = 10
+  const BATCH_SIZE = 30 //Feel free to change the batch size accordingly to how many comments you wannna delete at one time , dont go above 30-35 tho - meta might rate limit you - i initially started at BATCH_SIZE = 10
 
   const clickProper = (el) => {
     el.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }))
