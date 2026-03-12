@@ -44,6 +44,3 @@ That's it — the script runs fully automatically until all comments are deleted
 
 Use at your own risk. This script interacts with Instagram's UI via browser automation. It does not use any private APIs or credentials. Your account data is never accessed or transmitted anywhere.
 
-## Disclaimer
-
-Use at your own risk. This script interacts with Instagram's UI via browser automation. It does not use any private APIs or credentials. Your account data is never accessed or transmitted anywhere.
