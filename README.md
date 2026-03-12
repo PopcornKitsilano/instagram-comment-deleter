@@ -2,9 +2,9 @@
 
 A browser console script to bulk-delete your Instagram comments from the **Your Activity** page.
 
-Deletes comments in batches of 30 — fully automated except for **one manual confirm click per batch** (Instagram's confirm dialog runs in a cross-origin Facebook iframe and cannot be clicked programmatically). 
+Deletes comments in batches — **fully automated, no manual clicks required.**
 
-## Feel free to change the batch size accordingly to how many comments you wannna delete at one time , dont go above 30-35 though - meta might rate limit you - i initially started at BATCH_SIZE = 10
+Feel free to change `BATCH_SIZE` in the script. Don't go above 30-35 though — Meta may rate limit you. I initially started at 10.
 
 ---
 
@@ -27,19 +27,7 @@ Wait for the comments list to fully load before proceeding.
 
 Copy the script from [`code.js`](./code.js) and paste it into the console, then press `Enter`.
 
-**Step 4 — Confirm each batch**
-
-When the **"Delete comments?"** dialog appears, click **Delete** manually once.
-
-The script handles everything else automatically — selecting 10 comments, clicking the delete bar, waiting, then looping to the next batch.
-
----
-
-## Why one manual click?
-
-Instagram's confirmation dialog loads inside a **cross-origin Facebook iframe**. Browser security policy blocks programmatic access to cross-origin iframes, so the confirm button cannot be clicked automatically from the console.
-
-Everything else is fully automated.
+That's it — the script runs fully automatically until all comments are deleted.
 
 ---
 
@@ -51,6 +39,10 @@ Everything else is fully automated.
 - Script logs progress to the console: `[X deleted] Waiting for Select...`
 
 ---
+
+## Disclaimer
+
+Use at your own risk. This script interacts with Instagram's UI via browser automation. It does not use any private APIs or credentials. Your account data is never accessed or transmitted anywhere.
 
 ## Disclaimer
 
